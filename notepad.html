@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+<html>
+<title>
+</title>
+</head>
+
+
+<script>
+    $(function() {
+        $(".button").click( () => {mp.trigger("Note:ReceiveContent", encodeURIComponent($("#paragraph_text").val().replace(/'/, "%27")))}) 
+         //replace is used as ' ' are not encoded in the URI. Thus, replace it with the encodedURI value.
+    });
+
+    $(function () {
+        $(".copy").click( () => {
+          
+          $("#paragraph_text").select()
+          document.execCommand('copy')
+
+        } )
+
+    });
+
+    let lastPush = false
+    let ready = false
+
+    function setText(value){
+      
+      if(!ready)
+        lastPush = value
+      else
+        $("#paragraph_text").val(decodeURIComponent(value).replace("%27", "'"))
+        //replace is used as the %27 back to '.'
+    }
+
+//makes a queue. might not be needed when the script is linked directly to the db.
+    $(function(){
+      if (lastPush)
+        $("#paragraph_text").val(lastPush)
+      
+      ready = true
+    })
+
+    function toggle(){    
+    $('body').toggleClass("main");
+    }
+    
+    </script>
+
+
+<style>
+
+body{
+    background: transparent;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+
+/* styling paper */ 
+#paper {   /* main div containing all elements within*/
+
+  width: 600px;
+  height: 500px;
+  position: relative;
+  margin: 20px auto;
+  padding-top: 40px;
+  padding-bottom: 110px;
+  background-color: white;
+  box-shadow: 0px 0px 5px 0px #888;
+  position: absolute;
+  top: 10%;
+  left: 45%;
+  width: 610px;
+  height: 510px;
+  padding-bottom: 148px;
+  margin: 22px auto;
+  
+}
+
+/* styling red vertical line */
+#paper::before {
+  content: '';
+  width: 2px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 40px;
+  background-color: rgba(255,0,0,0.6);
+}
+
+/* styling blue horizontal lines */
+#pattern {
+  height: 100%;
+  background-image: repeating-linear-gradient(white 0px, white 24px, teal 25px);
+
+}
+
+
+/*text area properties*/
+#paragraph_text {
+    
+    
+    padding-left: 55px;
+    border: none;
+    scrollbar-width: none;  /* Firefox */
+    background:transparent;
+    color: black;
+    resize:none;
+    box-shadow: none;
+    outline: none;
+    white-space: pre-wrap;
+    line-height: 25px;
+    font-size: large;
+   
+    
+    
+}
+/*disabling scrollbar*/
+#paragraph_text::-webkit-scrollbar {
+    display: none;
+}
+#paragraph_text {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+/*submit/save button = .button*/
+.button {
+  border-radius: 2px;
+  background-color: #FFC000;
+  border: none;
+  color: #ffffff;
+  text-align: center;
+  font-size: 15px;
+  padding: 20px;
+  width: 200px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 2px;
+  font-family: 'Josefin Sans', sans-serif;
+  position:absolute;
+  right: 10px;
+  top:  590px;
+
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+/*copy all text button = .copy*/
+.copy{
+
+  position:absolute;
+  left: 260px;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  background-color: inherit;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  cursor: pointer;
+  display: inline-block;
+  top:  630px;
+}
+
+.copy:hover span{
+
+  color:#FFC000;
+
+}
+
+</style>
+
+
+  
+<body class = "main">
+
+  <div id="paper">
+      <div id="pattern">
+        
+          
+         <textarea id="paragraph_text" cols="55" rows="20" maxlength="1000"></textarea><br><br><br>
+         <button class = "button"><span>Save/Submit</span></button><br><br>
+         <button class = "copy"><span>(( Copy all text ))</span></button>
+         
+        </div>
+      </div>
+    
+    
+            
+
+    
+   
+
+
+</body>
+</html>
